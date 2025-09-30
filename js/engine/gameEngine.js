@@ -522,9 +522,38 @@ export class GameEngine {
      * Update gameplay state
      */
     updateGameplay(deltaTime) {
+        // Store previous player moving state
+        const wasPlayerMoving = this.player && this.player.getIsMoving ? this.player.getIsMoving() : false;
+        
         // Update player animation and state
         if (this.player && this.player.update) {
             this.player.update(deltaTime);
+        }
+        
+        // Check if player just finished moving and verify objectives
+        const isPlayerMoving = this.player && this.player.getIsMoving ? this.player.getIsMoving() : false;
+        if (wasPlayerMoving && !isPlayerMoving && this.objectiveManager && this.player) {
+            // Player just completed movement, check for objectives at new position
+            const playerPos = this.player.getGridPosition();
+            console.log('Checking objectives at position:', playerPos);
+            const objectiveResult = this.objectiveManager.checkObjectives(playerPos);
+            
+            if (objectiveResult.collected.length > 0) {
+                console.log('Collected items:', objectiveResult.collected);
+                
+                // Update progress panel with new objective status
+                const objectiveStatus = this.objectiveManager.getObjectiveStatus();
+                this.updateProgressPanel(objectiveStatus);
+                
+                // Play collection sounds
+                objectiveResult.collected.forEach(item => {
+                    if (item.type === 'fragment' && this.audioService) {
+                        this.audioService.playSFX('fragment_collected');
+                    } else if (item.type === 'virgilio' && this.audioService) {
+                        this.audioService.playSFX('virgilio_found');
+                    }
+                });
+            }
         }
         
         // Update player position in game state
