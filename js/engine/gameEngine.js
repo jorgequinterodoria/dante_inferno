@@ -466,27 +466,40 @@ export class GameEngine {
      * Handle keydown events
      */
     handleKeyDown(inputEvent) {
-        const { action, keyCode } = inputEvent;
-        
-        switch (this.currentState) {
-            case GAME_STATES.MENU:
-                if (action === 'action' || keyCode === 'Space') {
-                    console.log('Starting new game...');
-                    this.startNewGame();
+        if (this.currentState === GAME_STATES.MENU) {
+            if (inputEvent.key === 'Space') {
+                // this.setState(GAME_STATES.PLAYING);
+                this.startNewGame();
+            }
+        } else if (this.currentState === GAME_STATES.PLAYING) {
+            // Handle player movement
+            if (this.player && this.gameState.currentMaze) {
+                switch (inputEvent.key) {
+                    case 'ArrowUp':
+                    case 'KeyW':
+                        this.player.move('up', this.gameState.currentMaze);
+                        break;
+                    case 'ArrowDown':
+                    case 'KeyS':
+                        this.player.move('down', this.gameState.currentMaze);
+                        break;
+                    case 'ArrowLeft':
+                    case 'KeyA':
+                        this.player.move('left', this.gameState.currentMaze);
+                        break;
+                    case 'ArrowRight':
+                    case 'KeyD':
+                        this.player.move('right', this.gameState.currentMaze);
+                        break;
+                    case 'Escape':
+                        this.pause();
+                        break;
                 }
-                break;
-                
-            case GAME_STATES.PLAYING:
-                if (action === 'menu' || keyCode === 'Escape') {
-                    this.pause();
-                }
-                break;
-                
-            case GAME_STATES.PAUSED:
-                if (action === 'menu' || keyCode === 'Escape') {
-                    this.resume();
-                }
-                break;
+            }
+        } else if (this.currentState === GAME_STATES.PAUSED) {
+            if (inputEvent.key === 'Escape') {
+                this.resume();
+            }
         }
     }
 
@@ -644,15 +657,49 @@ export class GameEngine {
      * Render gameplay
      */
     renderGameplay(interpolation) {
-        // Gameplay rendering will be implemented in task 2.2
-        // For now, just show a placeholder
-        this.ctx.fillStyle = '#2d1810';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        // Check if we have all required components
+        if (!this.renderer) {
+            this.ctx.fillStyle = '#2d1810';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.fillStyle = '#DEB887';
+            this.ctx.font = '16px monospace';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText('Inicializando renderer...', this.canvas.width / 2, this.canvas.height / 2);
+            return;
+        }
+
+        // Get current maze from levelManager or gameState
+        const currentMaze = this.gameState?.currentMaze || (this.levelManager?.getCurrentMaze ? this.levelManager.getCurrentMaze() : null);
         
-        this.ctx.fillStyle = '#DEB887';
-        this.ctx.font = '16px monospace';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText('Modo de Juego - Implementación Pendiente', this.canvas.width / 2, this.canvas.height / 2);
+        // Get objectives from objectiveManager
+        const objectives = this.objectiveManager?.getObjectives ? this.objectiveManager.getObjectives() : null;
+        
+        // Use the renderer's complete game scene rendering
+        if (this.renderer.renderGameScene) {
+            this.renderer.renderGameScene(
+                this.gameState,
+                this.player,
+                currentMaze,
+                objectives,
+                this.deltaTime
+            );
+        } else {
+            // Fallback rendering if renderGameScene is not available
+            this.ctx.fillStyle = '#2d1810';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            if (currentMaze && this.renderer.drawMaze) {
+                this.renderer.drawMaze(currentMaze);
+            }
+            
+            if (this.player && this.renderer.drawPlayer) {
+                this.renderer.drawPlayer(this.player, currentMaze);
+            }
+            
+            if (objectives && this.renderer.drawObjectives) {
+                this.renderer.drawObjectives(objectives);
+            }
+        }
     }
 
     /**
@@ -859,13 +906,55 @@ export class GameEngine {
                 levelProgress: [],
                 dialogueMetadata: {}
             };
-            
+
             // Initialize SaveManager if not already done
             if (!this.saveManager) {
                 const { SaveManager } = await import('../data/saveManager.js');
                 this.saveManager = new SaveManager();
             }
-            
+
+            // Initialize LevelManager if not already done
+            if (!this.levelManager) {
+                const { LevelManager } = await import('../game/levelManager.js');
+                this.levelManager = new LevelManager();
+            }
+
+            // Initialize Player if not already done
+            if (!this.player) {
+                const { Player } = await import('../game/player.js');
+                this.player = new Player(0, 0, this.audioService);
+            }
+
+            // Load the first level
+            if (this.levelManager.loadLevel(1)) {
+                this.gameState.currentMaze = this.levelManager.getCurrentMaze();
+                
+                // Set player position to maze start position
+                const maze = this.gameState.currentMaze;
+                if (maze && maze.startPosition) {
+                    this.player.reset(maze.startPosition);
+                    this.gameState.playerPosition = maze.startPosition;
+                } else {
+                    // Fallback to (1,1) if no start position defined
+                    this.player.reset({ x: 1, y: 1 });
+                    this.gameState.playerPosition = { x: 1, y: 1 };
+                }
+
+                // Set renderer theme for level 1
+                if (this.renderer && this.renderer.setTheme) {
+                    this.renderer.setTheme(1);
+                }
+
+                // Set renderer game state reference
+                if (this.renderer && this.renderer.setGameState) {
+                    this.renderer.setGameState(this.gameState);
+                }
+
+                console.log('Level 1 loaded successfully');
+            } else {
+                console.error('Failed to load level 1');
+            }
+
             // Track new session start
             this.saveManager.updateStatistics(this.gameState, 'sessionStart');
             
@@ -886,9 +975,7 @@ export class GameEngine {
             // Trigger initial auto-save for new game
             this.triggerAutoSave('newGame');
             
-            // Initialize first level (will be implemented in subsequent tasks)
-            // Cambiar al estado PLAYING solo cuando se inicia realmente el juego
-            this.setState(GAME_STATES.PLAYING);
+            console.log('New game initialized successfully');
             
         } catch (error) {
             console.error('Failed to start new game:', error);
