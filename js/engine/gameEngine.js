@@ -606,9 +606,9 @@ export class GameEngine {
         }
 
         // Render debug info in development
-        if (process.env.NODE_ENV === 'development') {
-            this.renderDebugInfo();
-        }
+        // if (process.env.NODE_ENV === 'development') {
+        //     this.renderDebugInfo();
+        // }
 
         // Render performance overlay if enabled
         if (this.showPerformanceOverlay && this.renderer && this.renderer.renderPerformanceOverlay) {
