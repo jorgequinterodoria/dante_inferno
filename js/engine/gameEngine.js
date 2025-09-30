@@ -517,11 +517,109 @@ export class GameEngine {
      * Update gameplay state
      */
     updateGameplay(deltaTime) {
-        // Game logic updates will be implemented in subsequent tasks
-        // This includes player movement, collision detection, objectives, etc.
+        // Update player animation and state
+        if (this.player && this.player.update) {
+            this.player.update(deltaTime);
+        }
+        
+        // Update player position in game state
+        if (this.player && this.gameState) {
+            const playerPos = this.player.getPosition ? this.player.getPosition() : this.player.position;
+            if (playerPos) {
+                this.gameState.playerPosition = { ...playerPos };
+            }
+        }
+        
+        // Update objectives if available
+        if (this.objectiveManager && this.objectiveManager.update) {
+            this.objectiveManager.update(deltaTime, this.gameState);
+        }
+        
+        // Update level manager
+        if (this.levelManager && this.levelManager.update) {
+            this.levelManager.update(deltaTime);
+        }
         
         // Update progress panel with current game state
         this.updateProgressPanel();
+        
+        // Check for level completion conditions
+        this.checkLevelCompletion();
+    }
+
+    /**
+     * Check if level completion conditions are met
+     */
+    checkLevelCompletion() {
+        if (!this.gameState || !this.objectiveManager) return;
+        
+        const objectives = this.objectiveManager.getObjectives ? this.objectiveManager.getObjectives() : null;
+        if (!objectives) return;
+        
+        // Check if all objectives are completed
+        const allObjectivesComplete = objectives.virgilioFound && 
+                                    objectives.fragmentsCollected >= 3 && 
+                                    objectives.exitUnlocked;
+        
+        if (allObjectivesComplete) {
+            console.log('Level completed!');
+            // Handle level completion
+            this.handleLevelCompletion();
+        }
+    }
+
+    /**
+     * Handle level completion
+     */
+    handleLevelCompletion() {
+        // Track level completion time
+        const levelCompletionTime = Date.now() - this.gameState.gameStats.sessionStartTime;
+        this.trackLevelCompletion(this.gameState.currentLevel, levelCompletionTime);
+
+        // Increment level
+        this.gameState.currentLevel++;
+        this.gameState.levelProgress.push({
+            level: this.gameState.currentLevel - 1,
+            completionTime: levelCompletionTime,
+            timestamp: Date.now()
+        });
+
+        // Reset objectives for next level
+        if (this.objectiveManager) {
+            this.objectiveManager.reset(3); // Default 3 fragments for each level
+        }
+
+        // Load next level
+        if (this.levelManager && this.levelManager.loadLevel(this.gameState.currentLevel)) {
+            this.gameState.currentMaze = this.levelManager.getCurrentMaze();
+            
+            // Reset player position to maze start
+            const maze = this.gameState.currentMaze;
+            if (maze && maze.startPosition) {
+                this.player.reset(maze.startPosition);
+                this.gameState.playerPosition = { ...maze.startPosition };
+            }
+
+            // Update renderer theme for new level
+            if (this.renderer && this.renderer.setTheme) {
+                this.renderer.setTheme(this.gameState.currentLevel);
+            }
+
+            // Reset progress panel for new level
+            if (this.progressPanel) {
+                this.progressPanel.reset();
+                this.updateProgressPanel();
+            }
+
+            // Trigger auto-save for level completion
+            this.triggerAutoSave('levelComplete');
+
+            console.log(`Level ${this.gameState.currentLevel} loaded successfully`);
+        } else {
+            // Handle game completion if no more levels
+            console.log('Game completed!');
+            this.setState(GAME_STATES.GAME_OVER);
+        }
     }
 
     /**
@@ -877,7 +975,7 @@ export class GameEngine {
             // Reset game state to defaults with enhanced statistics
             this.gameState = {
                 currentLevel: 1,
-                playerPosition: { x: 0, y: 0 },
+                playerPosition: { x: 1, y: 1 },
                 collectedItems: [],
                 objectivesCompleted: {
                     virgilioFound: false,
@@ -896,7 +994,7 @@ export class GameEngine {
                     totalSessions: 0,
                     levelsCompleted: 0,
                     objectivesCompleted: 0,
-                    fragmentsCollected: 0,
+                    fragmentsColleted: 0,
                     averageSessionTime: 0,
                     fastestLevelCompletion: {},
                     totalDistance: 0,
@@ -922,60 +1020,81 @@ export class GameEngine {
             // Initialize Player if not already done
             if (!this.player) {
                 const { Player } = await import('../game/player.js');
-                this.player = new Player(0, 0, this.audioService);
+                this.player = new Player(1, 1, this.audioService);
             }
 
             // Load the first level
+            console.log('Loading level 1...');
             if (this.levelManager.loadLevel(1)) {
                 this.gameState.currentMaze = this.levelManager.getCurrentMaze();
+                console.log('Level 1 loaded, maze:', this.gameState.currentMaze);
                 
                 // Set player position to maze start position
                 const maze = this.gameState.currentMaze;
                 if (maze && maze.startPosition) {
                     this.player.reset(maze.startPosition);
-                    this.gameState.playerPosition = maze.startPosition;
+                    this.gameState.playerPosition = { ...maze.startPosition };
+                    console.log('Player positioned at maze start:', maze.startPosition);
                 } else {
                     // Fallback to (1,1) if no start position defined
                     this.player.reset({ x: 1, y: 1 });
                     this.gameState.playerPosition = { x: 1, y: 1 };
+                    console.log('Player positioned at fallback (1,1)');
                 }
 
                 // Set renderer theme for level 1
                 if (this.renderer && this.renderer.setTheme) {
                     this.renderer.setTheme(1);
+                    console.log('Renderer theme set for level 1');
                 }
 
                 // Set renderer game state reference
                 if (this.renderer && this.renderer.setGameState) {
                     this.renderer.setGameState(this.gameState);
+                    console.log('Renderer game state reference set');
                 }
 
                 console.log('Level 1 loaded successfully');
             } else {
                 console.error('Failed to load level 1');
+                throw new Error('Failed to load level 1');
             }
 
-            // Track new session start
-            this.saveManager.updateStatistics(this.gameState, 'sessionStart');
-            
-            // Set up auto-save system for new game
-            this.setupAutoSave();
-            
-            // Reset objective manager if it exists
+            // Initialize objective manager if not already done
+            if (!this.objectiveManager) {
+                const { ObjectiveManager } = await import('../game/objectives.js');
+                this.objectiveManager = new ObjectiveManager();
+            }
+
+            // Reset objective manager
             if (this.objectiveManager) {
                 this.objectiveManager.reset(3); // Default 3 fragments for level 1
+                console.log('Objective manager reset');
             }
             
             // Reset progress panel to initial state
             if (this.progressPanel) {
                 this.progressPanel.reset();
                 this.updateProgressPanel();
+                console.log('Progress panel reset');
             }
+
+            // Track new session start
+            if (this.saveManager) {
+                this.saveManager.updateStatistics(this.gameState, 'sessionStart');
+            }
+            
+            // Set up auto-save system for new game
+            this.setupAutoSave();
             
             // Trigger initial auto-save for new game
             this.triggerAutoSave('newGame');
             
-            console.log('New game initialized successfully');
+            // Set game state to PLAYING
+            this.setState(GAME_STATES.PLAYING);
+            
+            console.log('New game initialized successfully, state set to PLAYING');
+
             
         } catch (error) {
             console.error('Failed to start new game:', error);
