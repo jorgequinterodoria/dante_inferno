@@ -109,7 +109,7 @@ export class GameEngine {
         try {
             // Import and initialize Renderer
             const { Renderer } = await import('./renderer.js');
-            this.renderer = new Renderer(this.canvas);
+            this.renderer = new Renderer(this.canvas, this.ctx);
             this.renderer.init();
             
             // Import and initialize InputManager
