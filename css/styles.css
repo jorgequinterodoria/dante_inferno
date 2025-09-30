@@ -1,0 +1,1576 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+/* Game Container */
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #2d1810, #1a1a1a);
+}
+
+/* Header */
+.game-header {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px 20px;
+    text-align: center;
+    border-bottom: 2px solid #8B4513;
+}
+
+.game-header h1 {
+    font-size: 1.5rem;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Main Game Area */
+.game-main {
+    flex: 1;
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    min-height: 0;
+}
+
+/* Canvas Container */
+.game-canvas-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 3px solid #8B4513;
+    border-radius: 8px;
+    position: relative;
+}
+
+#gameCanvas {
+    max-width: 100%;
+    max-height: 100%;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    background-color: #2d1810;
+}
+
+/* Progress Panel */
+.progress-panel {
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 2px solid #8B4513;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.progress-panel h2 {
+    color: #FFD700;
+    text-align: center;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #8B4513;
+    padding-bottom: 10px;
+}
+
+/* Objective Status */
+.objective-status {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.objective-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background-color: rgba(139, 69, 19, 0.2);
+    border-radius: 4px;
+}
+
+.objective-label {
+    font-weight: bold;
+    color: #DEB887;
+}
+
+.status-pendiente {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+.status-encontrado {
+    color: #51cf66;
+    font-weight: bold;
+}
+
+.status-bloqueada {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+.status-desbloqueada {
+    color: #51cf66;
+    font-weight: bold;
+}
+
+/* Level Info */
+.level-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid #8B4513;
+    padding-top: 15px;
+}
+
+.level-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.level-label {
+    color: #DEB887;
+    font-weight: bold;
+}
+
+#currentLevel,
+#levelName {
+    color: #FFD700;
+    font-weight: bold;
+}
+
+/* Game Menu */
+.game-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.menu-content {
+    background-color: #2d1810;
+    border: 3px solid #8B4513;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    min-width: 300px;
+}
+
+.menu-content h2 {
+    color: #FFD700;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.menu-button {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 10px 0;
+    background-color: #8B4513;
+    color: #ffffff;
+    border: 2px solid #DEB887;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+    background-color: #A0522D;
+    border-color: #FFD700;
+    transform: translateY(-2px);
+}
+
+.menu-button:active {
+    transform: translateY(0);
+}
+
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.loading-content {
+    text-align: center;
+    color: #FFD700;
+}
+
+.loading-content h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.loading-bar {
+    width: 300px;
+    height: 20px;
+    background-color: #2d1810;
+    border: 2px solid #8B4513;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.loading-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #8B4513, #FFD700);
+    width: 0%;
+    transition: width 0.3s ease;
+    animation: loadingPulse 2s infinite;
+}
+
+@keyframes loadingPulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .game-main {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .progress-panel {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 15px;
+    }
+    
+    .objective-status,
+    .level-info {
+        flex: 1;
+    }
+    
+    .game-header h1 {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-container {
+        padding: 10px;
+    }
+    
+    .game-header {
+        padding: 8px 15px;
+    }
+    
+    .game-header h1 {
+        font-size: 1rem;
+    }
+    
+    .progress-panel {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .menu-content {
+        padding: 30px 20px;
+        min-width: 250px;
+    }
+    
+    .menu-content h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-main {
+        padding: 10px;
+    }
+    
+    .progress-panel {
+        padding: 10px;
+    }
+    
+    .objective-item,
+    .level-item {
+        font-size: 0.9rem;
+    }
+    
+    #gameCanvas {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .loading-progress {
+        animation: none;
+    }
+    
+    .menu-button {
+        transition: none;
+    }
+    
+    .menu-button:hover {
+        transform: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .game-container {
+        background: #000000;
+    }
+    
+    .progress-panel {
+        background-color: #000000;
+        border-color: #ffffff;
+    }
+    
+    .menu-content {
+        background-color: #000000;
+        border-color: #ffffff;
+    }
+}
+/*
+ Error Overlay */
+.error-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.error-content {
+    background-color: #2d1810;
+    border: 3px solid #ff6b6b;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    min-width: 300px;
+    color: #ffffff;
+}
+
+.error-content h2 {
+    color: #ff6b6b;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.error-content p {
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.error-content button {
+    padding: 10px 20px;
+    background-color: #ff6b6b;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.error-content button:hover {
+    background-color: #ff5252;
+}
+
+/* Dialog System */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1500;
+    animation: dialogFadeIn 0.3s ease-out;
+}
+
+.dialog-content {
+    background-color: #2d1810;
+    border: 3px solid #8B4513;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 600px;
+    min-width: 400px;
+    margin: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    animation: dialogSlideIn 0.3s ease-out;
+}
+
+.dialog-speaker {
+    color: #FFD700;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid #8B4513;
+    padding-bottom: 10px;
+}
+
+.dialog-text {
+    color: #DEB887;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    text-align: justify;
+    min-height: 60px;
+    padding: 10px 0;
+}
+
+.dialog-continue {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #8B4513;
+    color: #ffffff;
+    border: 2px solid #DEB887;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.dialog-continue:hover {
+    background-color: #A0522D;
+    border-color: #FFD700;
+    transform: translateY(-2px);
+}
+
+.dialog-continue:active {
+    transform: translateY(0);
+}
+
+/* Dialog Type Specific Styles */
+.dialog-intro {
+    border-color: #4169E1;
+}
+
+.dialog-intro .dialog-speaker {
+    color: #87CEEB;
+}
+
+.dialog-virgilio {
+    border-color: #800080;
+}
+
+.dialog-virgilio .dialog-speaker {
+    color: #DDA0DD;
+}
+
+.dialog-completion {
+    border-color: #228B22;
+}
+
+.dialog-completion .dialog-speaker {
+    color: #90EE90;
+}
+
+.dialog-fragment {
+    border-color: #0000FF;
+}
+
+.dialog-fragment .dialog-speaker {
+    color: #87CEFA;
+}
+
+.dialog-exit {
+    border-color: #FFA500;
+}
+
+.dialog-exit .dialog-speaker {
+    color: #FFD700;
+}
+
+/* Dialog Animations */
+@keyframes dialogFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes dialogSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Dialog Responsive Design */
+@media (max-width: 768px) {
+    .dialog-content {
+        min-width: 300px;
+        max-width: 90vw;
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .dialog-speaker {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    
+    .dialog-text {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        min-height: 50px;
+    }
+    
+    .dialog-continue {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dialog-content {
+        min-width: 280px;
+        padding: 15px;
+    }
+    
+    .dialog-speaker {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    .dialog-text {
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+        min-height: 40px;
+    }
+}
+
+/* Accessibility for dialog system */
+@media (prefers-reduced-motion: reduce) {
+    .dialog-overlay {
+        animation: none;
+    }
+    
+    .dialog-content {
+        animation: none;
+    }
+    
+    .dialog-continue:hover {
+        transform: none;
+    }
+}
+
+/* High contrast mode for dialogs */
+@media (prefers-contrast: high) {
+    .dialog-content {
+        background-color: #000000;
+        border-color: #ffffff;
+    }
+    
+    .dialog-speaker {
+        color: #ffffff;
+        border-color: #ffffff;
+    }
+    
+    .dialog-text {
+        color: #ffffff;
+    }
+    
+    .dialog-continue {
+        background-color: #ffffff;
+        color: #000000;
+        border-color: #ffffff;
+    }
+}
+/* Offlin
+e Functionality Styles */
+
+/* Offline Indicator */
+.offline-indicator {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #ff6b6b;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    z-index: 2500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: offlineSlideIn 0.3s ease-out;
+    display: none;
+}
+
+.offline-indicator::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: offlinePulse 2s infinite;
+}
+
+@keyframes offlineSlideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes offlinePulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Offline Error Messages */
+.offline-error {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #2d1810;
+    border: 2px solid #ff6b6b;
+    border-radius: 8px;
+    padding: 15px 20px;
+    max-width: 400px;
+    z-index: 2500;
+    animation: errorSlideUp 0.3s ease-out;
+}
+
+.offline-error .error-content {
+    background: none;
+    border: none;
+    padding: 0;
+    min-width: auto;
+    text-align: left;
+}
+
+.offline-error .error-content p {
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.offline-error .error-content button {
+    background-color: #ff6b6b;
+    color: #ffffff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    float: right;
+}
+
+.offline-error .error-content button:hover {
+    background-color: #ff5252;
+}
+
+@keyframes errorSlideUp {
+    from {
+        transform: translateX(-50%) translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Update Notification */
+.update-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #2d1810;
+    border: 3px solid #4169E1;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    z-index: 3000;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    animation: updateSlideIn 0.3s ease-out;
+}
+
+.update-notification .update-content p {
+    color: #87CEEB;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.update-notification .update-content button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: 2px solid #4169E1;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.update-notification #updateBtn {
+    background-color: #4169E1;
+    color: #ffffff;
+}
+
+.update-notification #updateBtn:hover {
+    background-color: #1E90FF;
+    transform: translateY(-2px);
+}
+
+.update-notification #dismissBtn {
+    background-color: transparent;
+    color: #4169E1;
+}
+
+.update-notification #dismissBtn:hover {
+    background-color: #4169E1;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+@keyframes updateSlideIn {
+    from {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Cache Status Indicator */
+.cache-status {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    z-index: 2000;
+    display: none;
+}
+
+.cache-status.cache-complete {
+    background-color: rgba(34, 139, 34, 0.8);
+}
+
+.cache-status.cache-incomplete {
+    background-color: rgba(255, 165, 0, 0.8);
+}
+
+.cache-status.cache-error {
+    background-color: rgba(255, 107, 107, 0.8);
+}
+
+/* Performance Overlay */
+.performance-overlay {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #00FF00;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    z-index: 2000;
+    display: none;
+    min-width: 200px;
+}
+
+.performance-overlay.show {
+    display: block;
+}
+
+.performance-overlay .perf-line {
+    margin: 2px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.performance-overlay .perf-label {
+    color: #CCCCCC;
+}
+
+.performance-overlay .perf-value {
+    color: #00FF00;
+    font-weight: bold;
+}
+
+.performance-overlay .perf-value.warning {
+    color: #FFA500;
+}
+
+.performance-overlay .perf-value.error {
+    color: #FF6B6B;
+}
+
+/* Responsive adjustments for offline features */
+@media (max-width: 768px) {
+    .offline-indicator {
+        top: 5px;
+        right: 5px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .offline-error {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        transform: none;
+        max-width: none;
+    }
+    
+    .update-notification {
+        left: 10px;
+        right: 10px;
+        transform: translateY(-50%);
+        padding: 20px;
+    }
+    
+    .performance-overlay {
+        top: 5px;
+        left: 5px;
+        padding: 8px;
+        font-size: 0.7rem;
+        min-width: 150px;
+    }
+    
+    .cache-status {
+        bottom: 5px;
+        left: 5px;
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .update-notification .update-content button {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    .offline-error .error-content button {
+        float: none;
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+/* Accessibility for offline features */
+@media (prefers-reduced-motion: reduce) {
+    .offline-indicator {
+        animation: none;
+    }
+    
+    .offline-error {
+        animation: none;
+    }
+    
+    .update-notification {
+        animation: none;
+    }
+    
+    .offline-indicator::before {
+        animation: none;
+    }
+    
+    .update-notification button:hover,
+    .offline-error button:hover {
+        transform: none;
+    }
+}
+
+/* High contrast mode for offline features */
+@media (prefers-contrast: high) {
+    .offline-indicator {
+        background-color: #000000;
+        border: 2px solid #ffffff;
+    }
+    
+    .offline-error {
+        background-color: #000000;
+        border-color: #ffffff;
+    }
+    
+    .update-notification {
+        background-color: #000000;
+        border-color: #ffffff;
+    }
+    
+    .performance-overlay {
+        background-color: #000000;
+        border: 1px solid #ffffff;
+    }
+    
+    .cache-status {
+        background-color: #000000 !important;
+        border: 1px solid #ffffff;
+    }
+}
+/* Enha
+nced Animations and Transitions for Polish */
+
+/* Smooth level transitions */
+.level-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #2d1810, #1a1a1a, #2d1810);
+    background-size: 400% 400%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
+    animation: levelTransitionBg 3s ease-in-out;
+}
+
+.level-transition-content {
+    text-align: center;
+    color: #FFD700;
+    animation: levelTransitionText 3s ease-in-out;
+}
+
+.level-transition-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    animation: levelTitleGlow 2s ease-in-out infinite alternate;
+}
+
+.level-transition-content p {
+    font-size: 1.2rem;
+    color: #DEB887;
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: levelDescriptionFade 3s ease-in-out 0.5s forwards;
+}
+
+.level-transition-progress {
+    width: 300px;
+    height: 6px;
+    background-color: rgba(139, 69, 19, 0.3);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.level-transition-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #8B4513, #FFD700, #8B4513);
+    background-size: 200% 100%;
+    width: 0%;
+    animation: levelProgressBar 3s ease-in-out forwards, levelProgressShimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes levelTransitionBg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes levelTransitionText {
+    0% { transform: translateY(-50px); opacity: 0; }
+    20% { transform: translateY(0); opacity: 1; }
+    80% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(50px); opacity: 0; }
+}
+
+@keyframes levelTitleGlow {
+    0% { text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.3); }
+    100% { text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6); }
+}
+
+@keyframes levelDescriptionFade {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes levelProgressBar {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+@keyframes levelProgressShimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Enhanced objective completion animations */
+.objective-complete-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, rgba(81, 207, 102, 0.95), rgba(34, 139, 34, 0.95));
+    border: 3px solid #51cf66;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    z-index: 4500;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    animation: objectiveCompleteSlide 2s ease-out forwards;
+}
+
+.objective-complete-notification h3 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    animation: objectiveCompleteGlow 1s ease-in-out infinite alternate;
+}
+
+.objective-complete-notification p {
+    color: #ffffff;
+    font-size: 1rem;
+    margin: 0;
+    opacity: 0;
+    animation: objectiveCompleteFade 2s ease-out 0.3s forwards;
+}
+
+@keyframes objectiveCompleteSlide {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+    20% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
+    }
+    30% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    90% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+}
+
+@keyframes objectiveCompleteGlow {
+    0% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 255, 255, 0.3); }
+    100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 255, 255, 0.6); }
+}
+
+@keyframes objectiveCompleteFade {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Fragment collection animation */
+.fragment-collect-effect {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1000;
+    animation: fragmentCollectEffect 1s ease-out forwards;
+}
+
+.fragment-collect-effect::before {
+    content: '✨';
+    font-size: 2rem;
+    color: #0000FF;
+    text-shadow: 0 0 10px rgba(0, 0, 255, 0.8);
+    animation: fragmentSparkle 1s ease-out forwards;
+}
+
+@keyframes fragmentCollectEffect {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(2) translateY(-30px);
+        opacity: 0;
+    }
+}
+
+@keyframes fragmentSparkle {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Enhanced menu button animations */
+.menu-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.menu-button:hover::before {
+    left: 100%;
+}
+
+.menu-button:hover {
+    background-color: #A0522D;
+    border-color: #FFD700;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+}
+
+.menu-button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(139, 69, 19, 0.4);
+}
+
+/* Enhanced progress panel animations */
+.progress-panel {
+    animation: progressPanelSlideIn 0.5s ease-out;
+}
+
+.objective-item {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.objective-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+    transition: left 0.8s ease;
+}
+
+.objective-item.completed::before {
+    left: 100%;
+}
+
+.objective-item:hover {
+    background-color: rgba(139, 69, 19, 0.3);
+    transform: translateX(5px);
+}
+
+.status-encontrado, .status-desbloqueada {
+    animation: statusSuccess 0.5s ease-out;
+}
+
+.status-pendiente, .status-bloqueada {
+    animation: statusPending 2s ease-in-out infinite;
+}
+
+@keyframes progressPanelSlideIn {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes statusSuccess {
+    0% {
+        transform: scale(1);
+        color: #51cf66;
+    }
+    50% {
+        transform: scale(1.1);
+        color: #40c057;
+        text-shadow: 0 0 10px rgba(81, 207, 102, 0.5);
+    }
+    100% {
+        transform: scale(1);
+        color: #51cf66;
+    }
+}
+
+@keyframes statusPending {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Enhanced canvas container animations */
+.game-canvas-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.game-canvas-container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #8B4513, #FFD700, #8B4513, #DEB887);
+    background-size: 400% 400%;
+    z-index: -1;
+    border-radius: 8px;
+    animation: canvasBorderGlow 4s ease-in-out infinite;
+}
+
+@keyframes canvasBorderGlow {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Enhanced loading screen */
+.loading-screen {
+    background: linear-gradient(135deg, #2d1810, #1a1a1a);
+}
+
+.loading-content {
+    animation: loadingContentPulse 2s ease-in-out infinite;
+}
+
+.loading-content h2 {
+    animation: loadingTitleGlow 3s ease-in-out infinite;
+}
+
+@keyframes loadingContentPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+@keyframes loadingTitleGlow {
+    0%, 100% {
+        color: #FFD700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+    50% {
+        color: #FFA500;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+}
+
+/* Smooth page transitions */
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #2d1810, #1a1a1a);
+    z-index: 6000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: pageTransitionSlide 0.8s ease-in-out forwards;
+}
+
+.page-transition-content {
+    color: #FFD700;
+    font-size: 1.5rem;
+    text-align: center;
+    animation: pageTransitionText 0.8s ease-in-out;
+}
+
+@keyframes pageTransitionSlide {
+    0% {
+        transform: translateX(-100%);
+    }
+    50% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes pageTransitionText {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Enhanced error overlay animations */
+.error-overlay {
+    animation: errorOverlayFade 0.3s ease-out;
+}
+
+.error-content {
+    animation: errorContentSlide 0.3s ease-out;
+    position: relative;
+}
+
+.error-content.critical {
+    animation: errorContentSlide 0.3s ease-out, errorCriticalPulse 1s ease-in-out infinite 0.5s;
+}
+
+@keyframes errorOverlayFade {
+    0% {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+    100% {
+        opacity: 1;
+        backdrop-filter: blur(5px);
+    }
+}
+
+@keyframes errorContentSlide {
+    0% {
+        transform: translateY(-100px) scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes errorCriticalPulse {
+    0%, 100% {
+        border-color: #ff6b6b;
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4);
+    }
+    50% {
+        border-color: #ff5252;
+        box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    .level-transition,
+    .objective-complete-notification,
+    .fragment-collect-effect,
+    .loading-content,
+    .page-transition,
+    .error-content {
+        animation: none;
+    }
+    
+    .menu-button:hover,
+    .objective-item:hover {
+        transform: none;
+    }
+    
+    .game-canvas-container::before {
+        animation: none;
+        background: #8B4513;
+    }
+    
+    .status-pendiente,
+    .status-bloqueada {
+        animation: none;
+    }
+}
+
+/* High contrast mode enhancements */
+@media (prefers-contrast: high) {
+    .level-transition {
+        background: #000000;
+    }
+    
+    .objective-complete-notification {
+        background: #000000;
+        border-color: #ffffff;
+    }
+    
+    .objective-complete-notification h3,
+    .objective-complete-notification p {
+        color: #ffffff;
+    }
+    
+    .game-canvas-container::before {
+        background: #ffffff;
+    }
+}
+
+/* Mobile-specific animations */
+@media (max-width: 768px) {
+    .level-transition-content h2 {
+        font-size: 2rem;
+    }
+    
+    .objective-complete-notification {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .objective-complete-notification h3 {
+        font-size: 1.3rem;
+    }
+    
+    .menu-button:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+}
+
+/* Smooth scrolling for help system */
+.help-main {
+    scroll-behavior: smooth;
+}
+
+/* Enhanced focus indicators for accessibility */
+.menu-button:focus,
+.help-nav-item:focus,
+.dialog-continue:focus {
+    outline: 3px solid #FFD700;
+    outline-offset: 2px;
+}
+
+/* Improved button press feedback */
+.menu-button:active,
+.dialog-continue:active,
+.help-button:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* Subtle hover effects for interactive elements */
+.objective-item,
+.level-item {
+    cursor: default;
+    transition: all 0.2s ease;
+}
+
+.objective-item:hover {
+    background-color: rgba(139, 69, 19, 0.25);
+}
+
+/* Enhanced visual feedback for game state changes */
+.game-container.level-complete {
+    animation: levelCompleteGlow 2s ease-in-out;
+}
+
+@keyframes levelCompleteGlow {
+    0%, 100% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.1) saturate(1.2);
+    }
+}
+
+/* Smooth canvas scaling */
+#gameCanvas {
+    transition: transform 0.3s ease;
+}
+
+#gameCanvas:hover {
+    transform: scale(1.01);
+}
+
+/* Enhanced loading bar animation */
+.loading-progress {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading-progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: loadingShimmer 2s infinite;
+}
+
+@keyframes loadingShimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}

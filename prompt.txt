@@ -1,0 +1,105 @@
+Prompt para Desarrollador IA: Inferno Pixelado: La Redención de Dante
+Especificaciones Técnicas Principales
+
+Tecnologías: HTML5, CSS3, JavaScript ES6+ vanilla (sin frameworks)
+Almacenamiento: localStorage para guardar progreso, configuraciones y coleccionables (guardado automático en todo momento).
+Canvas: HTML5 Canvas para renderizado de gráficos 2D
+Audio: Web Audio API o HTML5 Audio
+Arquitectura: Juego completamente del lado cliente, sin backend
+
+Concepto del Juego
+
+Desarrolla un videojuego 2D de laberintos con estilo pixel art vibrante, detallado y con iluminación dinámica.
+
+Todos los niveles del juego deben representarse como laberintos progresivamente más difíciles (basados en el modelo de la imagen adjunta).
+
+Toda la narrativa, menús, interfaz y diálogos estarán en español.
+
+El jugador podrá continuar desde donde dejó su partida, gracias a un sistema de guardado automático en localStorage.
+
+Narrativa Principal
+
+El juego sigue la historia de la Divina Comedia, comenzando con Dante perdido en el Bosque Oscuro y su encuentro con Virgilio. Cada círculo del infierno es un laberinto único con mayor complejidad que el anterior.
+
+Mecánicas de Juego Core
+1. Sistema de Movimiento
+
+Dante puede moverse por el laberinto: arriba, abajo, izquierda y derecha.
+
+Controles: WASD o flechas.
+
+Colisiones con muros del laberinto.
+
+2. Objetivos por Nivel
+
+Encontrar a Virgilio (nivel 1, tutorial).
+
+Recolectar fragmentos (objetos clave) en cada laberinto.
+
+Desbloquear la salida (se activa solo al completar los objetivos).
+
+3. Sistema de Progresión
+
+Cada nivel corresponde a un círculo del infierno (laberinto distinto).
+
+Dificultad creciente: más grande, con más obstáculos y coleccionables.
+
+Sistema de checkpoints automáticos con localStorage.
+
+4. Sistema de Guardado Automático
+
+El progreso debe guardarse en localStorage automáticamente, incluyendo:
+
+{
+  currentLevel: number,       // nivel actual
+  playerPosition: {x, y},     // posición dentro del laberinto
+  collectedItems: array,      // fragmentos u objetos recogidos
+  objectivesCompleted: array, // misiones completadas (Virgilio, etc.)
+  gameSettings: { volume, dificultad },
+  gameStats: { playTime, deathCount, dialoguesSeen }
+}
+
+
+El juego debe cargar automáticamente la partida al abrirse si existe progreso guardado.
+
+Opción para reiniciar desde cero en el menú.
+
+Laberintos
+
+Cada nivel es un laberinto representado en Canvas.
+
+Basado en la imagen de ejemplo, con colores y símbolos:
+
+🟩 Inicio
+
+🔴 Dante (jugador)
+
+🟪 Virgilio
+
+🟦 Fragmento
+
+🟧 Salida (bloqueada hasta cumplir objetivos)
+
+UI y Textos
+
+Todos los textos (narrativa, progreso, menús, diálogos) estarán en español.
+
+Panel lateral de progreso con estados:
+
+Virgilio: Pendiente / Encontrado
+
+Fragmentos: X/3
+
+Salida: Bloqueada / Desbloqueada
+
+Entrega Final
+
+El juego debe ser un archivo HTML jugable en cualquier navegador moderno, con todos los assets incluidos. Debe:
+
+Tener laberintos progresivos (niveles cada vez más difíciles).
+
+Guardar y cargar automáticamente el progreso con localStorage.
+
+Mantener todo el contenido en español.
+
+Ser jugable completamente sin conexión después de la primera carga.

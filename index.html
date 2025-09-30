@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inferno Pixelado: La Redención de Dante</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <h1>Inferno Pixelado: La Redención de Dante</h1>
+        </header>
+        
+        <main class="game-main">
+            <div class="game-canvas-container">
+                <canvas id="gameCanvas" width="800" height="600"></canvas>
+            </div>
+            
+            <aside class="progress-panel">
+                <h2>Progreso</h2>
+                <div class="objective-status">
+                    <div class="objective-item">
+                        <span class="objective-label">Virgilio:</span>
+                        <span id="virgilioStatus" class="status-pendiente">Pendiente</span>
+                    </div>
+                    <div class="objective-item">
+                        <span class="objective-label">Fragmentos:</span>
+                        <span id="fragmentStatus">0/3</span>
+                    </div>
+                    <div class="objective-item">
+                        <span class="objective-label">Salida:</span>
+                        <span id="exitStatus" class="status-bloqueada">Bloqueada</span>
+                    </div>
+                </div>
+                
+                <div class="level-info">
+                    <div class="level-item">
+                        <span class="level-label">Círculo:</span>
+                        <span id="currentLevel">1</span>
+                    </div>
+                    <div class="level-item">
+                        <span class="level-label">Nombre:</span>
+                        <span id="levelName">Bosque Oscuro</span>
+                    </div>
+                </div>
+            </aside>
+        </main>
+        
+        <div class="game-menu" id="gameMenu" style="display: none;">
+            <div class="menu-content">
+                <h2>Menú Principal</h2>
+                <button id="newGameBtn" class="menu-button">Nuevo Juego</button>
+                <button id="continueBtn" class="menu-button">Continuar</button>
+                <button id="settingsBtn" class="menu-button">Configuración</button>
+                <button id="resetBtn" class="menu-button">Reiniciar desde cero</button>
+            </div>
+        </div>
+        
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-content">
+                <h2>Cargando...</h2>
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Game Scripts -->
+    <script type="module" src="js/main.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        // Register service worker for offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
