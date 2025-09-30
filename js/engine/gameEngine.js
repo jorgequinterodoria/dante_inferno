@@ -467,28 +467,33 @@ export class GameEngine {
      */
     handleKeyDown(inputEvent) {
         if (this.currentState === GAME_STATES.MENU) {
-            if (inputEvent.key === 'Space') {
+            if (inputEvent.keyCode === 'Space') {
                 // this.setState(GAME_STATES.PLAYING);
                 this.startNewGame();
             }
         } else if (this.currentState === GAME_STATES.PLAYING) {
             // Handle player movement
             if (this.player && this.gameState.currentMaze) {
-                switch (inputEvent.key) {
+                console.log('Processing key:', inputEvent.keyCode); // Debug log
+                switch (inputEvent.keyCode) {
                     case 'ArrowUp':
                     case 'KeyW':
+                        console.log('Moving up');
                         this.player.move('up', this.gameState.currentMaze);
                         break;
                     case 'ArrowDown':
                     case 'KeyS':
+                        console.log('Moving down');
                         this.player.move('down', this.gameState.currentMaze);
                         break;
                     case 'ArrowLeft':
                     case 'KeyA':
+                        console.log('Moving left');
                         this.player.move('left', this.gameState.currentMaze);
                         break;
                     case 'ArrowRight':
                     case 'KeyD':
+                        console.log('Moving right');
                         this.player.move('right', this.gameState.currentMaze);
                         break;
                     case 'Escape':
@@ -497,7 +502,7 @@ export class GameEngine {
                 }
             }
         } else if (this.currentState === GAME_STATES.PAUSED) {
-            if (inputEvent.key === 'Escape') {
+            if (inputEvent.keyCode === 'Escape') {
                 this.resume();
             }
         }
